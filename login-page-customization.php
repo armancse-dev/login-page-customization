@@ -28,8 +28,26 @@
    */
 
   function lgcw_page_create(){
+    ?>
+      <div class="main_area_lgcw">
+        <div class="body_area_lgcw">
+          <h3 id="title"><?php echo esc_attr( 'Customization Login page' ); ?></h3>
+          <form action="options.php" method="post">
+            <?php wp_nonce_field( 'update-options' ); ?>
+            <label for="primary_color_lgcw" name="primary_color_lgcw"><?php echo esc_attr( 'Primary Color' ); ?></label>
+            <input type="color" name="primary_color_lgcw" value="<?php print get_option( 'primary_color_lgcw' ) ?>">
 
-   }
+            <input type="hidden" name="action" value="update" >
+            <input type="hidden" name="page_options" value="primary_color_lgcw" >
+
+            <input type="submit" name="submit" class="button button-primary" value="<?php _e('Save Changes', 'lgcw'); ?>">
+          </form>
+        </div>
+        <div class="sidebar_area_lgcw"></div>
+      </div>
+
+    <?php
+  }
 
 
    
