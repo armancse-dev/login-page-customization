@@ -44,12 +44,18 @@
           <h3 id="title"><?php echo esc_attr( 'Customization Login page' ); ?></h3>
           <form action="options.php" method="post">
             <?php wp_nonce_field( 'update-options' ); ?>
+            
             <!-- Primary Color -->
             <label for="primary_color_lgcw" name="primary_color_lgcw"><?php echo esc_attr( 'Primary Color' ); ?></label>
             <input type="color" name="primary_color_lgcw" value="<?php print get_option( 'primary_color_lgcw' ); ?>">
+
+            <!-- Secondary Color -->
+            <label for="secondary_color_lgcw" name="secondary_color_lgcw"><?php echo esc_attr( 'Secondary Color' ); ?></label>
+            <input type="color" name="secondary_color_lgcw" value="<?php print get_option( 'secondary_color_lgcw' ); ?>">
+            
             <!-- Main Logo -->
             <label for="logo_image_lgcw" name="logo_image_lgcw"><?php echo esc_attr( 'Upload Your Logo' ); ?></label>
-            <input type="text" name="logo_image_lgcw" value="<?php print get_option( 'logo_image_lgcwe' ); ?>" placeholder="Paste your Logo URL here">
+            <input type="text" name="logo_image_lgcw" value="<?php print get_option( 'logo_image_lgcw' ); ?>" placeholder="Paste your Logo URL here">
 
             <!-- Login page BG Image -->
             <label for="custom_bg_img_lgcw" name="custom_bg_img_lgcw"><?php print esc_attr( 'Upload your Bacground Image' ); ?></label>
@@ -60,7 +66,7 @@
             <input type="text" name="custom_brightness_bg_lgcw" value="<?php print get_option('custom_brightness_bg_lgcw') ?>" placeholder="Between 0.1 to 0.9">
 
             <input type="hidden" name="action" value="update" >
-            <input type="hidden" name="page_options" value="primary_color_lgcw, logo_image_lgcw, custom_bg_img_lgcw, custom_brightness_bg_lgcw" >
+            <input type="hidden" name="page_options" value="primary_color_lgcw, logo_image_lgcw, custom_bg_img_lgcw, custom_brightness_bg_lgcw, secondary_color_lgcw" >
 
             <input type="submit" name="submit" class="button button-primary" value="<?php _e('Save Changes', 'lgcw'); ?>">
           </form>
@@ -84,25 +90,53 @@ function lgcw_register_login_enqueue(){
 
 add_action( 'login_enqueue_scripts', 'lgcw_register_login_enqueue');
 
-// Changing Login form logo
+// Login logo Changing
 function lgcw_login_page_logo_change(){
    ?>
-   <style>
-     #login h1 a, .login h1 a{
-       background-image: url(<?php print plugin_dir_url(__FILE__). 'img/whatson_logo.png'; ?>);
-     }
-   </style>
+    <style>
+      #login h1 a, .login h1 a{
+        background-image: url(<?php print get_option( 'logo_image_lgcw' ); ?>) !important;
+      }
+
+      #login form p.submit input {
+        background: <?php print get_option( 'primary_color_lgcw' ); ?>!important;
+      }
+
+      .login #login_error,
+      .login .message,
+      .login .success {
+        border-left: 4px solid <?php print get_option( 'primary_color_lgcw' ); ?>!important;
+      }
+      input#user_login,
+      input#user_pass {
+        border-left: 4px solid <?php print get_option( 'primary_color_lgcw' ); ?>!important;
+      }
+
+      .login #backtoblog a {
+        background: <?php print get_option( 'secondary_color_lgcw' ); ?>!important;
+      }
+
+      body.login {
+        background-image: url(<?php print get_option( 'custom_bg_img_lgcw' ); ?>) !important;
+      }
+
+      body.login::after {
+        background: <?php print get_option( 'custom_brightness_bg_lgcw' ); ?>!important;
+        
+      }
+
+    
+    </style>
  
    <?php
  }
  add_action( 'login_enqueue_scripts', 'lgcw_login_page_logo_change');
  
- // Changing Login form logo url
- function lgcw_url_change_for_login_logo_(){
+ // Login logo url Changing 
+ function lgcw_url_change_for_login_logo(){
    return home_url();
  }
- add_filter( 'login_headerurl', ' function lgcw_url_change_for_login_logo_(){
-  ');
+ add_filter( 'login_headerurl', 'lgcw_url_change_for_login_logo');
 
 
  ?>
