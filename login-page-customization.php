@@ -47,23 +47,28 @@
             
             <!-- Primary Color -->
             <label for="primary_color_lgcw" name="primary_color_lgcw"><?php echo esc_attr( 'Primary Color' ); ?></label>
+            <small>Add your primary color</small>
             <input type="color" name="primary_color_lgcw" value="<?php print get_option( 'primary_color_lgcw' ); ?>">
 
             <!-- Secondary Color -->
             <label for="secondary_color_lgcw" name="secondary_color_lgcw"><?php echo esc_attr( 'Secondary Color' ); ?></label>
+            <small>Add your secondary color</small>
             <input type="color" name="secondary_color_lgcw" value="<?php print get_option( 'secondary_color_lgcw' ); ?>">
             
             <!-- Main Logo -->
             <label for="logo_image_lgcw" name="logo_image_lgcw"><?php echo esc_attr( 'Upload Your Logo' ); ?></label>
+            <small>Paste your logo URL here, 80X80 Recomanded </small>
             <input type="text" name="logo_image_lgcw" value="<?php print get_option( 'logo_image_lgcw' ); ?>" placeholder="Paste your Logo URL here">
 
             <!-- Login page BG Image -->
-            <label for="custom_bg_img_lgcw" name="custom_bg_img_lgcw"><?php print esc_attr( 'Upload your Bacground Image' ); ?></label>
+            <label for="custom_bg_img_lgcw" name="custom_bg_img_lgcw"><?php print esc_attr( 'Upload your Background Image' ); ?></label>
+            <small>Paste your background URL here</small>
             <input type="text" name="custom_bg_img_lgcw" value="<?php print get_option('custom_bg_img_lgcw') ?>" placeholder="Paste your Background Image URL here">
 
             <!-- Login page BG Brightness -->
-            <label for="custom_brightness_bg_lgcw" name="custom_brightness_bg_lgcw"><?php print esc_attr( 'Bacground Brightness {Between 0.1 to 0.9}' ); ?></label>
-            <input type="text" name="custom_brightness_bg_lgcw" value="<?php print get_option('custom_brightness_bg_lgcw') ?>" placeholder="Between 0.1 to 0.9">
+            <label for="custom_brightness_bg_lgcw" name="custom_brightness_bg_lgcw"><?php print esc_attr( 'Background Brightness'); ?></label>
+            <small>Set your background brightness, Number only (Between 0.1 to 0.9)</small>
+            <input type="text" name="custom_brightness_bg_lgcw" value="<?php print get_option('custom_brightness_bg_lgcw') ?>" placeholder="Background Brightness">
 
             <input type="hidden" name="action" value="update" >
             <input type="hidden" name="page_options" value="primary_color_lgcw, logo_image_lgcw, custom_bg_img_lgcw, custom_brightness_bg_lgcw, secondary_color_lgcw" >
@@ -138,5 +143,23 @@ function lgcw_login_page_logo_change(){
  }
  add_filter( 'login_headerurl', 'lgcw_url_change_for_login_logo');
 
+
+//  Plugin Redirect Feature
+
+ register_activation_hook( __FILE__, 'lgcw_plugin_activation');
+ function lgcw_plugin_activation(){
+    add_option( 'lgcw_plugin_do_activation_redirect', true );
+ }
+
+ add_action( 'admin_init', 'lgcw_plugin_redirect');
+ function lgcw_plugin_redirect(){
+  if(get_option('lgcw_plugin_do_activation_redirect', false)){
+    delete_option('lgcw_plugin_do_activation_redirect');
+    if(!isset($_GET['active-multi'])){
+      wp_safe_redirect(admin_url( 'admin.php?page=lgcw-plugin-option' ));
+      exit;
+    }
+  }
+ }
 
  ?>
